@@ -64,7 +64,13 @@ int main() {
     //s2.emplace(3, "hello");
     //s2.printStack();
 
-    UniquePtr<int> intPtr;
+    {
+        UniquePtr<int> intPtr;
+        UniquePtr<int> intPtr2(new int(55));
+        int val = *intPtr2;
+        cout << val << endl;
+    }
+
 
 
     return 0;

@@ -35,6 +35,7 @@ class UniquePtr {
         UniquePtr& operator=(UniquePtr&& rhs);
 
 
+        //UniquePtr<int> ptr(otherPtr) // copy constructor and assignemnt explicity deleted
         UniquePtr(const UniquePtr&) = delete; // Unique ptr cannot be copy constructed, becuase unique pointer owns the objcet to which it points
         UniquePtr& operator=(const UniquePtr&) = delete; // Unqieu ptr cannot be assigned because unique pointer owns the object to which it points
 
@@ -48,19 +49,35 @@ class UniquePtr {
         //Observers
         T* get() const noexcept;
 
+        //Operators
+        T& operator*();
+        UniquePtr operator->();
+
     private:
         T* _ptr;
 };
 
 template <typename T>
 UniquePtr<T>::UniquePtr() : _ptr(nullptr) {
-    cout << "constructing unique pointer" << endl;
+    cout << "Constructing the Unique Pointer" << endl;
+}
+
+//UniquePtr<int> intPtr(new int(54));
+template <typename T>
+UniquePtr<T>::UniquePtr(T* paramPtr) noexcept {
+    _ptr = paramPtr;
 }
 
 template<typename T>
 UniquePtr<T>::~UniquePtr() {
+    cout << "Destructing the pointer" << endl;
     delete _ptr;
+}
 
+template<typename T>
+T& UniquePtr<T>::operator*() {
+    //derefernce a null pointer, let the program crash
+    return *_ptr;
 }
 
 template<typename T>
