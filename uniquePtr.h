@@ -31,7 +31,7 @@ class UniquePtr {
     public:
         UniquePtr();
         UniquePtr(T*) noexcept; // inititlize by passing in a pointer? UniquePtr(new int(54))
-        UniquePtr(const UniquePtr&&) noexcept;
+        UniquePtr(UniquePtr&&) noexcept;
         UniquePtr& operator=(UniquePtr&& rhs);
 
 
@@ -65,7 +65,33 @@ UniquePtr<T>::UniquePtr() : _ptr(nullptr) {
 //UniquePtr<int> intPtr(new int(54));
 template <typename T>
 UniquePtr<T>::UniquePtr(T* paramPtr) noexcept {
-    _ptr = paramPtr;
+    this->_ptr = paramPtr;
+}
+
+//Move constructor
+template <typename T>
+UniquePtr<T>::UniquePtr(UniquePtr&& movePtr) noexcept : _ptr(movePtr._ptr) {
+    //resources from movePtr._ptr are being taken and put into _ptr
+    movePtr._ptr = nullptr;
+}
+
+// Move assignemnt operator
+// p1 = move(p2)
+// Assign p1 the address of p2
+// prevent memory leak by deleting contents at p1
+// reassign pointers, then nullify p2
+template<typename T>
+UniquePtr<T>& UniquePtr<T>::operator=(UniquePtr<T>&& rhs) {
+
+    // check for self assignemnt
+    if(this != &rhs) {
+        // prevent any memory leaks
+        delete this->_ptr; 
+        this->_ptr = rhs._ptr;
+        rhs._ptr = nullptr;
+    }
+
+    return *this;
 }
 
 template<typename T>

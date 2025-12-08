@@ -65,10 +65,10 @@ int main() {
     //s2.printStack();
 
     {
-        UniquePtr<int> intPtr;
-        UniquePtr<int> intPtr2(new int(55));
-        int val = *intPtr2;
-        cout << val << endl;
+        UniquePtr<string> intVPtr(new string("hello"));
+        UniquePtr<string> intVPtr2(new string("goodbye"));
+        
+        intVPtr = std::move(intVPtr2);
     }
 
 
